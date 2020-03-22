@@ -1,6 +1,9 @@
 # Renaissance Neighborhood - Scavenger Hunt 2020
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+[![Netlify](https://img.shields.io/netlify/c2b6f921-249f-41d7-97d3-d372f650bc0d?label=Netlify)](https://app.netlify.com/sites/rnatulsa-scavenger-hunt-2020/deploys)
+
+https://rnatulsa-scavenger-hunt-2020.netlify.com/
 
 The Renaissance Neighborhood Association is proud to offer a self-guided scavenger hunt for your entertainment. While amusing, it may serve to hone your observation skills and see things you have never noticed before. It can be as casual or as competitive as you would like!  To get started, head out your front door and start finding the items on the list. If you choose to upload an image, your scores will be considered for the Scavenger Hunt Leaderboard. Each item is worth 10 points. Bonus points are available! 
 
