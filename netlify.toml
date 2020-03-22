@@ -13,3 +13,6 @@
 
   # Directory with the serverless Lambda functions to deploy to AWS.
   functions = "functions/"
+
+[dev]
+  autoLaunch = false
