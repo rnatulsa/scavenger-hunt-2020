@@ -40,11 +40,6 @@ export default {
 		}),
     commonjs(),
 
-    // https://github.com/davidkpiano/xstate/issues/787#issuecomment-553599685
-    // replace({
-    //   'process.env.NODE_ENV': JSON.stringify(production ? "production" : "development"),
-    //   'process.env.LEADERBOARD_LOAD_INTERVAL': JSON.stringify(LEADERBOARD_LOAD_INTERVAL),
-    // }),
     replace(config({
       node_env: production ? "production" : "development"
     })),

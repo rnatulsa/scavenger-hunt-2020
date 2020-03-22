@@ -5,4 +5,7 @@
 <Tailwindcss />
 
 <style global>
+  html, body {
+    @apply font-sans;
+  }
 </style>
