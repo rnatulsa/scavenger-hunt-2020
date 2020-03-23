@@ -1,7 +1,7 @@
 const { getSpreadSheetValues } = require('./googleSheetsService.js');
 
-async function leaderboardData({auth, spreadsheetId}) {
-  const sheetName = 'Leaderboard Data';
+async function leaderboardData({auth, spreadsheetId, spreadsheetTab}) {
+  const sheetName = spreadsheetTab;
   const response = await getSpreadSheetValues({
     spreadsheetId,
     sheetName,
@@ -9,9 +9,10 @@ async function leaderboardData({auth, spreadsheetId}) {
   });
   const { values } = response.data;
   const columns = values[0];
-  const points = values[1];
+  const categories = values[1];
+  const points = values[2];
   const scores = values
-    .slice(2)
+    .slice(3)
     .filter(row => row[0] !== '')
     .map(row => row.map((cell, index) => {
       if (index === 0) {
@@ -30,9 +31,10 @@ async function leaderboardData({auth, spreadsheetId}) {
     }))
     ;
 
-  return {columns, points, scores};
+    return {columns, categories, points, scores};
 }
 
 module.exports = {
   leaderboardData
 }
+

@@ -14,8 +14,9 @@ You can skip any question you'd like, but only the highest scores will appear on
 These environment variables are required:
 
 - `GCLOUD_PROJECT`: A Google Cloud project ID
-- `GOOGLE_SHEET_ID`: A Google Sheet ID
 - `GOOGLE_APPLICATION_CREDENTIAL_BODY`: Base64 encoded contents of Google Cloud service account credentials file
+- `GOOGLE_SHEET_ID`: A Google Sheet ID
+- `GOOGLE_FORM_ID`: A Google Form ID
 
 ```console
 $ nodenv install
