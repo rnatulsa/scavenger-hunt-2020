@@ -1,10 +1,10 @@
 const { getAuthToken } = require('./googleSheetsService.js');
 const { leaderboardData } = require('./data');
-const { credentials, spreadsheetId } = require('./config');
+const { credentials, spreadsheetId, spreadsheetTab } = require('./config');
 
 async function main() {
   const auth = await getAuthToken({credentials});
-  return await leaderboardData({auth, spreadsheetId});
+  return await leaderboardData({auth, spreadsheetId, spreadsheetTab});
 }
 
 function error(err, statusCode = 500) {
