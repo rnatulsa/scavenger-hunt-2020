@@ -81,21 +81,6 @@ class Leaderboard {
     return [...this.scores].sort((a, b) => b.total_score - a.total_score)
   }
 
-  /**
-   * Calculate Possible Points
-   * @returns {Number}
-   */
-  possiblePoints() {
-    if (!this.data) {
-      return null;
-    }
-
-    return this.data.points
-      .filter(x => x !== '')
-      .reduce((acc, x) => acc + parseInt(x), 0)
-      ;
-  }
-
   mostRecentScore() {
     if (!this.scores.length) {
       return null;

@@ -1,8 +1,15 @@
 <script>
+  import { leaderboard } from './stores';
   import { Navigate } from 'svelte-router-spa'
 
-  export let scores = [];
-  export let offset = 3;
+  let leaderboard_loaded = false;
+  let scores = [];
+
+  $: {
+    if ($leaderboard) {
+      scores = [...$leaderboard.scores].sort((a, b) => b.timestamp - a.timestamp);
+    }
+  }
 </script>
 
 <style>
@@ -12,6 +19,9 @@
     @apply text-white;
     @apply font-black;
     @apply h-full;
+    @apply max-w-lg;
+    @apply mx-auto;
+    @apply my-2;
 
     background-color: var(--main-color-blue-dark);
   }
@@ -42,18 +52,27 @@
     background-color: var(--main-color-green);
   }
 
-  .place {
+  .finished {
     @apply flex-initial;
+    @apply font-normal;
+    @apply text-sm;
   }
 
-  .place span {
+  .score {
     @apply bg-white;
     @apply text-center;
-    @apply inline-block;
+    @apply block;
     @apply px-1;
-    @apply w-6;
-    @apply h-6;
+    @apply w-10;
+    @apply h-10;
     @apply font-bold;
+    @apply flex;
+    @apply items-center;
+  }
+
+  .score div {
+    @apply w-full;
+    @apply text-center;
   }
 
   .name {
@@ -66,28 +85,32 @@
     @apply text-right;
   }
 
-  li:nth-child(odd) .place {
+  li:nth-child(odd) .score {
     color: var(--main-color-blue-medium);
   }
-  li:nth-child(even) .place {
+  li:nth-child(even) .score {
     color: var(--main-color-green);
   }
 </style>
 
 <section>
-  <h2>Top Ten</h2>
+  <h2>All Scores</h2>
+
+  <div class="; my-6">
+    <Navigate to="/" styles="button ; block">Leaderboard</Navigate>
+  </div>
 
   <ul class="; my-2">
     {#each scores as score, i}
       <li>
-        <div class="place"><span>{i+offset+1}</span></div>
+        <div class="finished">{score.finished.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</div>
         <div class="name">{score.name}</div>
-        <div class="score">{score.total_score}</div>
+        <div class="score"><div>{score.total_score}</div></div>
       </li>
     {/each}
   </ul>
 
   <div class="; mt-6">
-    <Navigate to="/scores" styles="button ; block">See All Scores</Navigate>
+    <Navigate to="/" styles="button ; block">Leaderboard</Navigate>
   </div>
 </section>

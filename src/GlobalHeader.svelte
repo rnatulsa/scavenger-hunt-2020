@@ -1,4 +1,6 @@
 <script>
+  import { Navigate } from 'svelte-router-spa'
+
   const play_again_url = `https://docs.google.com/forms/d/${GOOGLE_FORM_ID}`;
 </script>
 
@@ -27,31 +29,17 @@
 
     border-color: var(--main-color-blue-dark);
   }
-
-  .pdf-button {
-    @apply p-2;
-    @apply bg-white;
-    @apply uppercase;
-    @apply font-bold;
-    @apply leading-none;
-    @apply text-center;
-
-    color: var(--main-color-blue-dark);
-  }
-  .pdf-button:hover {
-    @apply text-white;
-
-    background-color: var(--main-color-green);
-  }
 </style>
 
 <header>
-  <h1 class="; flex items-center">
-    <img alt="Renaissance Neighborhood Logo" src="img/logo.jpg" class="; block flex-initial w-16">
-    <div class="; flex-initial ml-4">
-      Renaissance Neighborhood<br>Scavenger Hunt
-    </div>
-  </h1>
+  <Navigate to="/">
+    <h1 class="; flex items-center">
+      <img alt="Renaissance Neighborhood Logo" src="img/logo.jpg" class="; block flex-initial w-16">
+      <div class="; flex-initial ml-4">
+        Renaissance Neighborhood<br>Scavenger Hunt
+      </div>
+    </h1>
+  </Navigate>
 
   <div class="; text-center lg:flex lg:items-center lg:justify-end text-3xl">
     <div class="; lg:flex-shrink lg:ml-4 my-2 p-1">
