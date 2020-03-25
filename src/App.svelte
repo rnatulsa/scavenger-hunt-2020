@@ -44,5 +44,5 @@
 <GlobalStyle />
 
 {#if leaderboard_loaded}
-  <Router {routes} />
+  <Router {routes} options={ {gaPageviews: true} } />
 {/if}
