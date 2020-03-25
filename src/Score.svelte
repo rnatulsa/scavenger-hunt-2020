@@ -1,5 +1,5 @@
 <script>
-  export let place = 'first';
+  export let place = null;
   export let score = null;
 </script>
 
@@ -74,13 +74,20 @@
 </style>
 
 <div class="award">
-  <div class="trophy">
-    <img alt="First Place" src="/img/trophies/{place}.svg" class="; w-full">
-  </div>
+  {#if place}
+    <div class="trophy">
+      <img alt="First Place" src="/img/trophies/{place}.svg" class="; w-full">
+    </div>
+  {/if}
 
   <div class="name-score">
     <div class="name">
-      {score.name}
+      <div>{score.name}</div>
+      <small class="; font-normal">
+        {score.finished.toLocaleDateString([], { month: 'long', day: 'numeric' })}
+        –
+        {score.finished.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+      </small>
     </div>
     <div class="score">
       {score.total_score}

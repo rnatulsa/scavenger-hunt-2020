@@ -69,7 +69,7 @@ class Leaderboard {
         this.categorized_items_index = this.makeCategorizedItemsIndex(this.data.categories);
         this.scores = this.data.scores
           .map(score => new Score({score, leaderboard}))
-          .sort((a, b) => a.timestamp - b.timestamp) // sorted by finished time in ascending order
+          .sort((a, b) => b.timestamp - a.timestamp) // sorted by finished time in descending order (most recent finisher wins)
           ;
         this.loading = false;
         this.onLoad(this);
@@ -86,7 +86,7 @@ class Leaderboard {
       return null;
     }
 
-    return this.scores[this.scores.length-1];
+    return this.scores[0];
   }
 
   stats() {
@@ -138,12 +138,14 @@ class Score {
     }, {});
 
     for (let [category, columns] of Object.entries(this.leaderboard.categorized_items_index)) {
-      columns.forEach(cur => {
-        completion[category].items++;
-        if (this.score[cur] > 0) {
-          completion[category].completed++;
-        }
-      });
+      columns
+        .filter(cur => !Boolean(this.leaderboard.data.columns[cur].match(/bonus/i)))
+        .forEach(cur => {
+          completion[category].items++;
+          if (this.score[cur] > 0) {
+            completion[category].completed++;
+          }
+        });
       completion[category].completion = completion[category].items == completion[category].completed;
     }
 
