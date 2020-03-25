@@ -11,7 +11,10 @@
       const {best, count} = score.completion;
 
       total = score.total_score;
-      time_completed = score.finished.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      time_completed = [
+        score.finished.toLocaleDateString([], { month: 'long', day: 'numeric' }),
+        score.finished.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+      ].join(' – ');
       completed_category_count = score.completion.count;
       best_category = score.completion.best;
     }

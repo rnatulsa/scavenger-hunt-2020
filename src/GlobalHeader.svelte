@@ -43,6 +43,9 @@
 
   <div class="; text-center lg:flex lg:items-center lg:justify-end text-3xl">
     <div class="; lg:flex-shrink lg:ml-4 my-2 p-1">
+      <a target="_blank" href="/scores" class="button ; block">All Scores</a>
+    </div>
+    <div class="; lg:flex-shrink lg:ml-4 my-2 p-1">
       <a target="_blank" href={play_again_url} class="button ; block">Join the Hunt</a>
     </div>
     <div class="; lg:flex-initial lg:ml-4 my-2 p-1">

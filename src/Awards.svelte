@@ -1,5 +1,5 @@
 <script>
-  import Award from './Award.svelte';
+  import Score from './Score.svelte';
 
   export let scores = [];
 
@@ -34,6 +34,6 @@
 
 <section>
   {#each scores as score, i}
-    <div><Award place={places[i]} score={score} /></div>
+    <div><Score place={places[i]} score={score} /></div>
   {/each}
 </section>

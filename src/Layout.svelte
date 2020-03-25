@@ -1,6 +1,7 @@
 <script>
 import { Route } from 'svelte-router-spa';
 import GlobalHeader from './GlobalHeader.svelte';
+import GlobalFooter from './GlobalFooter.svelte';
 
 export let currentRoute;
 const params = {}
@@ -27,4 +28,6 @@ const params = {}
   <GlobalHeader />
 
   <Route {currentRoute} {params} />
+
+  <GlobalFooter />
 </main>
