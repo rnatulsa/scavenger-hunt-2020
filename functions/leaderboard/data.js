@@ -1,4 +1,8 @@
+const { DateTime } = require('luxon');
 const { getSpreadSheetValues } = require('./googleSheetsService.js');
+
+const zone = 'America/Chicago';
+const format = 'M/d/yyyy h:mm:ss';
 
 async function leaderboardData({auth, spreadsheetId, spreadsheetTab}) {
   const sheetName = spreadsheetTab;
@@ -16,7 +20,8 @@ async function leaderboardData({auth, spreadsheetId, spreadsheetTab}) {
     .filter(row => row[0] !== '')
     .map(row => row.map((cell, index) => {
       if (index === 0) {
-        return new Date(cell);
+        const dt = DateTime.fromFormat(cell, format, { zone });
+        return new Date(dt);
       }
 
       if (index === row.length - 1) {
@@ -37,4 +42,3 @@ async function leaderboardData({auth, spreadsheetId, spreadsheetTab}) {
 module.exports = {
   leaderboardData
 }
-
