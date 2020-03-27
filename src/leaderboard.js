@@ -1,28 +1,59 @@
 import axios from 'axios';
 
 class Leaderboard {
-  // Leaderboard.DEFAULT_TIMEOUT = 60000; // 60 Seconds
-  // Leaderboard.MIN_TIMEOUT = 1000; // 1 Second
-
   constructor({onLoad, timeout}) {
-    this.data = null;
-    this.loading = false;
     this.onLoad = onLoad;
-    this.scores = [];
-    this.categorized_items_index = {};
+    this.timeout = this.effectiveTimeout(timeout);
 
-    this.load();
-    this.interval = setInterval(() => this.load(), this.effectiveTimeout(timeout));
+    this.categorized_items_index = {};
+    this.data = null;
+    this.interval = null;
+    this.loading = false;
+    this.scores = [];
+
+    this.start()
   }
 
+  /**
+   * Getter for Category Names
+   *
+   * @returns {string[]}
+   */
   get category_names() {
     return this._category_names || (
       this._category_names = Object.keys(this.categorized_items_index)
     );
   }
 
-  makeCategorizedItemsIndex(row) {
-    return row.reduce((acc, cur, idx) => {
+  /**
+   * Start the leaderboard
+   *
+   * - Stops any existing load interval
+   * - Runs initial load
+   * - Starts auto-refresh load interval
+   */
+  start() {
+    this.stop();
+    this.load();
+    this.interval = setInterval(() => this.load(), this.timeout);
+  }
+
+  /**
+   * Stop the leaderboard
+   */
+  stop() {
+    clearInterval(this.interval);
+  }
+
+  /**
+   * Make a categorized items index from the categories row
+   *
+   * This is useful for when we want to know what category an item belongs to.
+   *
+   * @param {string[]} categories There is a row in the sheet that declares the category for that column
+   */
+  makeCategorizedItemsIndex(categories) {
+    return categories.reduce((acc, cur, idx) => {
       if (cur) {
         if (!(cur in acc)) {
           acc[cur] = [idx];
@@ -37,6 +68,7 @@ class Leaderboard {
 
   /**
    * Determine effective interval timeout
+   *
    * @param {Number} timeout
    * @returns {Number}
    */
@@ -54,8 +86,6 @@ class Leaderboard {
    * Load Data
    */
   load() {
-    const leaderboard = this;
-
     if (this.loading) {
       return;
     }
@@ -68,7 +98,7 @@ class Leaderboard {
         this.data = res.data;
         this.categorized_items_index = this.makeCategorizedItemsIndex(this.data.categories);
         this.scores = this.data.scores
-          .map(score => new Score({score, leaderboard}))
+          .map(score => new Score({score, leaderboard: this}))
           .sort((a, b) => b.timestamp - a.timestamp) // sorted by finished time in descending order (most recent finisher wins)
           ;
         this.loading = false;
@@ -77,18 +107,31 @@ class Leaderboard {
       ;
   }
 
+  /**
+   * Scores ranked by total score
+   *
+   * @returns {Score[]}
+   */
   rankedScores() {
     return [...this.scores].sort((a, b) => b.total_score - a.total_score)
   }
 
+  /**
+   * The most recently completed hunt
+   *
+   * @returns {Score|null}
+   */
   mostRecentScore() {
-    if (!this.scores.length) {
-      return null;
-    }
-
-    return this.scores[0];
+    return this.scores.length ? this.scores[0] : null;
   }
 
+  /**
+   * Statistics
+   * - Completed: Number of times a category had full completion
+   * - Cumulative: Sum of all scores for each category
+   *
+   * @returns {{completed: Object.<string, number>, cumulative: Object.<string, number>}}
+   */
   stats() {
     const stats = {
       completed: this.category_names.reduce((acc, cur) => { acc[cur] = 0; return acc; }, {}),
@@ -123,6 +166,11 @@ class Score {
     this.category_scores = this.makeCategoryScores();
   }
 
+  /**
+   * Scores for each category
+   *
+   * @returns {Object.<string, number>}
+   */
   makeCategoryScores() {
     return Object.entries(this.leaderboard.categorized_items_index)
       .reduce((acc, [category, columns]) => {
@@ -131,12 +179,20 @@ class Score {
       }, {});
   }
 
+  /**
+   * Make a completion object to represent completion of each category
+   *
+   * @returns {{best, count: number, completion}}
+   */
   makeCompletion() {
+    /** @constant {Object.<string, >} completion  */
     const completion = this.leaderboard.category_names.reduce((acc, cur) => {
       acc[cur] = { items: 0, completed: 0, completion: false };
       return acc;
     }, {});
 
+    // Set the completion flag for each category.
+    // - Do not include bonus point items
     for (let [category, columns] of Object.entries(this.leaderboard.categorized_items_index)) {
       columns
         .filter(cur => !Boolean(this.leaderboard.data.columns[cur].match(/bonus/i)))
@@ -149,17 +205,29 @@ class Score {
       completion[category].completion = completion[category].items == completion[category].completed;
     }
 
+    /** @constant {number} count The count of completed categories */
     const count = Object.entries(completion).reduce((acc, [_category, {completion}]) => {
       return acc + Number(completion);
     }, 0);
 
-    const best = Object.entries(completion).sort((a, b) => {
-      return (b[1].completed / b[1].items) - (a[1].completed / a[1].items);
-    })[0][0];
+    /**
+     * Sort categorized completion by completed ratio
+     *
+     * @param {[string, {completed: number, items: number}]} sort_a
+     * @param {[string, {completed: number, items: number}]} sort_b
+     */
+    function completionSorter([_a_category, a], [_b_category, b]) {
+      return (b.completed / b.items) - (a.completed / a.items);
+    }
+
+    /** @constant {string|null} best The category with the highest completion ratio */
+    const best = !completion.length ? null : Object.entries(completion).sort(completionSorter)[0][0];
+    // - first [0] is guarded by !completion.length
+    // - second [0] is the object key from Object.entries
 
     return {best, count, completion};
   }
 }
 
-export { Leaderboard };
+export { Leaderboard, Score };
 export default Leaderboard;

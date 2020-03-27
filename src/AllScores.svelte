@@ -3,7 +3,6 @@
   import { Navigate } from 'svelte-router-spa'
   import Score from './Score.svelte';
 
-  let leaderboard_loaded = false;
   let scores = [];
 
   $: {
