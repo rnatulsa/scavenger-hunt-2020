@@ -1,15 +1,16 @@
 <script>
-  import { leaderboard } from './stores';
+  import { leaderboard } from '../stores';
 
-  import Awards from './Awards.svelte';
-  import HighFinishers from './HighFinishers.svelte';
-  import NeighborhoodStats from './NeighborhoodStats.svelte';
-  import MostRecentPlayer from './MostRecentPlayer.svelte';
+  import Awards from '../components/Awards.svelte';
+  import HighFinishers from '../components/HighFinishers.svelte';
+  import NeighborhoodStats from '../components/NeighborhoodStats.svelte';
+  import MostRecentPlayer from '../components/MostRecentPlayer.svelte';
 
   const suggestion_email = 'renaissance.neighbors@gmail.com';
   const suggestion_subject = 'Suggestion for the Scavenger Hunt';
   const suggestion_href = `mailto:${suggestion_email}?subject=${encodeURI(suggestion_subject)}`;
 
+  let leaderboard_loaded = false;
   let ranked_scores = [];
   let most_recent_score = null;
   let points = [];
@@ -25,6 +26,7 @@
       stats = $leaderboard.stats();
       top_3 = ranked_scores.slice(0, 3);
       high_finishers = ranked_scores.slice(3, 10);
+      leaderboard_loaded = true;
     }
   }
 </script>
@@ -68,7 +70,7 @@
   }
 </style>
 
-{#if leaderboard}
+{#if leaderboard_loaded}
   <Awards scores={top_3} />
 
   <div class="row-2">
@@ -76,12 +78,12 @@
       <HighFinishers scores={high_finishers} />
     </div>
     <div>
-      <NeighborhoodStats stats={stats} />
+      <NeighborhoodStats {stats} />
     </div>
     <div>
       <div class="; flex flex-col h-full justify-end">
         <div class="; flex-grow">
-          <MostRecentPlayer score={most_recent_score} points={points} />
+          <MostRecentPlayer score={most_recent_score} {points} />
         </div>
         <div class="; mt-2 flex-shrink">
           <a href={suggestion_href} class="email-link">

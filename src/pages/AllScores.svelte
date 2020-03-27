@@ -1,13 +1,13 @@
 <script>
-  import { leaderboard } from './stores';
+  import { leaderboard } from '../stores';
   import { Navigate } from 'svelte-router-spa'
-  import Score from './Score.svelte';
+  import Score from '../components/Score.svelte';
 
   let scores = [];
 
   $: {
     if ($leaderboard) {
-      scores = [...$leaderboard.scores].sort((a, b) => b.timestamp - a.timestamp);
+      scores = $leaderboard.scores;
     }
   }
 </script>
