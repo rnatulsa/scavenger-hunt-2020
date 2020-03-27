@@ -1,5 +1,6 @@
 <script>
 import { Route } from 'svelte-router-spa';
+import GlobalStyle from './GlobalStyle.svelte';
 import GlobalHeader from './GlobalHeader.svelte';
 import GlobalFooter from './GlobalFooter.svelte';
 
@@ -23,6 +24,8 @@ const params = {}
     }
   }
 </style>
+
+<GlobalStyle />
 
 <main>
   <GlobalHeader />

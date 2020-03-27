@@ -1,6 +1,6 @@
-import Layout from './Layout.svelte';
-import Leaderboard from './Leaderboard.svelte';
-import AllScores from './AllScores.svelte';
+import Layout from './layout/Layout.svelte';
+import Leaderboard from './pages/Leaderboard.svelte';
+import AllScores from './pages/AllScores.svelte';
 
 const routes = [
   {
