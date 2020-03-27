@@ -10,7 +10,6 @@
   const suggestion_subject = 'Suggestion for the Scavenger Hunt';
   const suggestion_href = `mailto:${suggestion_email}?subject=${encodeURI(suggestion_subject)}`;
 
-  let leaderboard_loaded = false;
   let ranked_scores = [];
   let most_recent_score = null;
   let points = [];
@@ -20,7 +19,6 @@
 
   $: {
     if ($leaderboard) {
-      leaderboard_loaded = true;
       ranked_scores = $leaderboard.rankedScores();
       most_recent_score = $leaderboard.mostRecentScore();
       points = $leaderboard.data.points;
@@ -70,7 +68,7 @@
   }
 </style>
 
-{#if leaderboard_loaded}
+{#if leaderboard}
   <Awards scores={top_3} />
 
   <div class="row-2">
