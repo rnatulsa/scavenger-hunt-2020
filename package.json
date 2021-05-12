@@ -16,7 +16,7 @@
     "braintree-web-drop-in": "^1.22.0",
     "netlify-cli": "^2.40.0",
     "npm-run-all": "^4.1.5",
-    "postcss": "^7.0.26",
+    "postcss": "^8.2.10",
     "postcss-import": "^12.0.1",
     "postcss-preset-env": "^6.7.0",
     "rollup": "^1.20.0",
